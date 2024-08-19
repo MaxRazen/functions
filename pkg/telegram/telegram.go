@@ -8,14 +8,14 @@ import (
 	"net/http"
 )
 
-type TelegramMessage struct {
+type Message struct {
 	ChatId    string `json:"chat_id"`
 	Message   string `json:"text"`
 	ParseMode string `json:"parse_mode"`
 	Silent    bool   `json:"disable_notification"`
 }
 
-type TelegramClient struct {
+type Client struct {
 	HTTPClient *http.Client
 	BaseURL    string
 	token      string
@@ -26,23 +26,27 @@ type Response struct {
 	Body   []byte
 }
 
-func New(token string) *TelegramClient {
-	return &TelegramClient{
+// Returns new instance of Telegram client with base URL and given BOT security token
+func New(token string) *Client {
+	return &Client{
 		HTTPClient: http.DefaultClient,
 		BaseURL:    "https://api.telegram.org/bot",
 		token:      token,
 	}
 }
 
-func (tc *TelegramClient) SendMessage(ctx context.Context, tm TelegramMessage) (*Response, error) {
+// Calls sendMessage method of API
+func (tc *Client) SendMessage(ctx context.Context, tm Message) (*Response, error) {
 	return tc.doRequest(ctx, "sendMessage", tm)
 }
 
-func (tc *TelegramClient) constructEndpointUrl(path string) string {
+// Constructs endpoint URL with the proper base URL, token and path
+func (tc *Client) constructEndpointUrl(path string) string {
 	return tc.BaseURL + tc.token + "/" + path
 }
 
-func (tc *TelegramClient) doRequest(ctx context.Context, path string, data any) (*Response, error) {
+// Performs request to the API
+func (tc *Client) doRequest(ctx context.Context, path string, data any) (*Response, error) {
 	endpoint := tc.constructEndpointUrl(path)
 	payload, err := json.Marshal(data)
 	if err != nil {
