@@ -90,10 +90,10 @@ type MessageSenderMock struct {
 	calls int
 }
 
-func (msm *MessageSenderMock) SendMessage(_ context.Context, tm telegram.TelegramMessage) (*telegram.Response, error) {
+func (msm *MessageSenderMock) SendMessage(_ context.Context, tm telegram.Message) (*telegram.Response, error) {
 	msm.calls++
 
-	expected := telegram.TelegramMessage{
+	expected := telegram.Message{
 		ChatId:    CustomChatId,
 		Message:   "*ALERT*\n\nmessage text",
 		ParseMode: "Markdown",

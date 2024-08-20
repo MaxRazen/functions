@@ -27,7 +27,7 @@ type Message struct {
 }
 
 type MessageSender interface {
-	SendMessage(context.Context, telegram.TelegramMessage) (*telegram.Response, error)
+	SendMessage(context.Context, telegram.Message) (*telegram.Response, error)
 }
 
 const (
@@ -90,7 +90,7 @@ func Send(ctx context.Context, msg *Message) error {
 		content = fmt.Sprintf("*%s*\n\n%s", msg.Header, content)
 	}
 
-	tgMsg := telegram.TelegramMessage{
+	tgMsg := telegram.Message{
 		ChatId:    GetChatId(msg.Channel),
 		Message:   content,
 		ParseMode: "Markdown",
