@@ -12,9 +12,10 @@ tidy:
 	go mod tidy
 	go mod verify
 
-## test: Runs tests across the project with no cache
+## test: Runs tests across the packages (./pkg) with no cache
 test:
 	go test -count=1 ./...
 
+## testapp: Runs tests across the project including packages and functions
 testall:
 	./bin/testall.sh
